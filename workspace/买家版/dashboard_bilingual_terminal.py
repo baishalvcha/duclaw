@@ -22,6 +22,7 @@ class BilingualTerminalMonitor(QWidget):
         super().__init__(parent)
         self.terminal_output = []
         self.analysis_output = []
+        self.is_executing = False  # 执行状态标志
         self.init_ui()
         self.start_system_monitoring()
         
@@ -48,7 +49,7 @@ class BilingualTerminalMonitor(QWidget):
         title_font.setPointSize(18)
         title_font.setBold(True)
         title_label.setFont(title_font)
-        title_label.setStyleSheet("color: #3a3a5a;")
+        title_label.setStyleSheet("color: #ffffff;")
         
         header_layout.addWidget(title_label)
         header_layout.addStretch()
@@ -57,6 +58,20 @@ class BilingualTerminalMonitor(QWidget):
         
         # 创建水平分割器
         main_splitter = QSplitter(Qt.Horizontal)
+        # 隐藏分割器手柄（去掉白色线条）
+        main_splitter.setStyleSheet("""
+            QSplitter::handle {
+                background-color: transparent;
+                width: 0px;
+                height: 0px;
+            }
+            QSplitter::handle:horizontal {
+                width: 0px;
+            }
+            QSplitter::handle:vertical {
+                height: 0px;
+            }
+        """)
         
         # 左边：终端原文面板
         left_panel = self.create_terminal_panel("终端原文", True)
@@ -73,6 +88,20 @@ class BilingualTerminalMonitor(QWidget):
         
         # 创建垂直分割器（下半部分）
         bottom_splitter = QSplitter(Qt.Vertical)
+        # 隐藏分割器手柄（去掉白色线条）
+        bottom_splitter.setStyleSheet("""
+            QSplitter::handle {
+                background-color: transparent;
+                width: 0px;
+                height: 0px;
+            }
+            QSplitter::handle:horizontal {
+                width: 0px;
+            }
+            QSplitter::handle:vertical {
+                height: 0px;
+            }
+        """)
         
         # 命令控制面板
         control_panel = self.create_control_panel()
@@ -106,7 +135,7 @@ class BilingualTerminalMonitor(QWidget):
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px 0 5px;
-                color: #3a3a5a;
+                color: #ffffff;
             }
         """)
         
@@ -165,7 +194,7 @@ class BilingualTerminalMonitor(QWidget):
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px 0 5px;
-                color: #3a3a5a;
+                color: #ffffff;
             }
         """)
         
@@ -185,13 +214,11 @@ class BilingualTerminalMonitor(QWidget):
         
         command_layout = QHBoxLayout(command_frame)
         
-        # 中文指令选择（最左边）
-        chinese_label = QLabel("中文指令:")
-        chinese_label.setStyleSheet("color: #ffffff; font-size: 12px;")
-        command_layout.addWidget(chinese_label)
+        # 中文指令选择（最左边）- 去掉标签，设置默认值
         
         self.chinese_command_combo = QComboBox()
         self.chinese_command_combo.addItems([
+            "请选择中文指令",  # 默认值
             "查看OpenClaw实时日志",
             "运行OpenClaw诊断工具",
             "查看OpenClaw系统状态",
@@ -208,19 +235,18 @@ class BilingualTerminalMonitor(QWidget):
                 border: 1px solid #3a3a5a;
                 border-radius: 4px;
                 padding: 5px;
-                min-width: 180px;
+                min-width: 300px;
             }
         """)
+        self.chinese_command_combo.setCurrentIndex(0)  # 设置为默认值
         self.chinese_command_combo.currentIndexChanged.connect(self.on_chinese_command_changed)
         command_layout.addWidget(self.chinese_command_combo)
         
-        # 英文指令选择（挨着中文命令）
-        english_label = QLabel("英文指令:")
-        english_label.setStyleSheet("color: #ffffff; font-size: 12px;")
-        command_layout.addWidget(english_label)
+        # 英文指令选择（挨着中文命令）- 去掉标签，设置默认值
         
         self.command_combo = QComboBox()
         self.command_combo.addItems([
+            "请选择英文指令",  # 默认值
             "openclaw logs --follow",
             "openclaw doctor",
             "openclaw status",
@@ -237,19 +263,17 @@ class BilingualTerminalMonitor(QWidget):
                 border: 1px solid #3a3a5a;
                 border-radius: 4px;
                 padding: 5px;
-                min-width: 200px;
+                min-width: 300px;
             }
         """)
+        self.command_combo.setCurrentIndex(0)  # 设置为默认值
         self.command_combo.currentIndexChanged.connect(self.on_english_command_changed)
         command_layout.addWidget(self.command_combo)
         
-        # 自定义命令输入（最大宽度）
-        custom_label = QLabel("自定义指令:")
-        custom_label.setStyleSheet("color: #ffffff; font-size: 12px;")
-        command_layout.addWidget(custom_label)
+        # 自定义命令输入（最大宽度）- 去掉标签，修改提示信息，增加宽度
         
         self.custom_command = QLineEdit()
-        self.custom_command.setPlaceholderText("输入自定义命令...")
+        self.custom_command.setPlaceholderText("请输入openclaw命令行")
         self.custom_command.setStyleSheet("""
             QLineEdit {
                 background-color: #2d2d4d;
@@ -273,7 +297,7 @@ class BilingualTerminalMonitor(QWidget):
                 font-weight: bold;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
@@ -292,7 +316,7 @@ class BilingualTerminalMonitor(QWidget):
                 font-weight: bold;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
@@ -329,10 +353,10 @@ class BilingualTerminalMonitor(QWidget):
                 padding: 6px 12px;
                 border-radius: 4px;
                 font-size: 12px;
-                min-width: 120px;
+                min-width: 300px;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
@@ -349,10 +373,10 @@ class BilingualTerminalMonitor(QWidget):
                 padding: 6px 12px;
                 border-radius: 4px;
                 font-size: 12px;
-                min-width: 120px;
+                min-width: 300px;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
@@ -360,8 +384,8 @@ class BilingualTerminalMonitor(QWidget):
         log_layout.addWidget(export_btn)
         
         # 清空全部按钮
-        clear_all_btn = QPushButton("🗑️ 清空全部")
-        clear_all_btn.setStyleSheet("""
+        self.clear_all_btn = QPushButton("🗑️ 清空全部")
+        self.clear_all_btn.setStyleSheet("""
             QPushButton {
                 background-color: #2d2d4d;
                 color: #ffffff;
@@ -369,15 +393,15 @@ class BilingualTerminalMonitor(QWidget):
                 padding: 6px 12px;
                 border-radius: 4px;
                 font-size: 12px;
-                min-width: 120px;
+                min-width: 300px;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
-        clear_all_btn.clicked.connect(self.clear_all_output)
-        log_layout.addWidget(clear_all_btn)
+        self.clear_all_btn.clicked.connect(self.clear_all_output)
+        log_layout.addWidget(self.clear_all_btn)
         
         # 导出/保存日志按钮（与上面"停止"按钮右对齐）
         export_save_btn = QPushButton("💾 导出/保存日志")
@@ -389,10 +413,10 @@ class BilingualTerminalMonitor(QWidget):
                 padding: 6px 12px;
                 border-radius: 4px;
                 font-size: 12px;
-                min-width: 120px;
+                min-width: 300px;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
@@ -425,7 +449,7 @@ class BilingualTerminalMonitor(QWidget):
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px 0 5px;
-                color: #3a3a5a;
+                color: #ffffff;
             }
         """)
         
@@ -444,7 +468,7 @@ class BilingualTerminalMonitor(QWidget):
                 margin-bottom: 10px;
             }
             QPushButton:hover {
-                background-color: #3a3a5a;
+                background-color: #ffffff;
                 color: #0f0f1a;
             }
         """)
@@ -466,7 +490,7 @@ class BilingualTerminalMonitor(QWidget):
             }
             QHeaderView::section {
                 background-color: #1a1a2e;
-                color: #3a3a5a;
+                color: #ffffff;
                 border: 1px solid #2d2d4d;
                 padding: 5px;
                 font-weight: bold;
@@ -662,6 +686,8 @@ class BilingualTerminalMonitor(QWidget):
         
         self.execute_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
+        self.clear_all_btn.setEnabled(True)  # 启用清空全部按钮
+        self.is_executing = False  # 重置执行状态标志
         
     def simulate_terminal_output(self, command):
         """模拟终端输出（用于非实时命令）"""
@@ -820,15 +846,35 @@ class BilingualTerminalMonitor(QWidget):
         
     def execute_command(self):
         """执行命令（实现实时监控）"""
+        # 检查是否正在执行（按钮应该是灰色的，但这里作为安全检查）
+        if self.is_executing:
+            # 不弹窗，直接返回
+            return
+        
+        # 验证输入
+        chinese_selected = self.chinese_command_combo.currentText()
+        english_selected = self.command_combo.currentText()
+        custom_command = self.custom_command.text()
+        
+        # 检查是否选择了默认值或空白值
+        if (chinese_selected == "请选择中文指令" or english_selected == "请选择英文指令") and not custom_command:
+            # 弹出提示框
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "输入提示", "请选择中文指令或选择英文指令、或手动输入openclaw命令")
+            return
+        
         # 优先使用自定义命令
-        if self.custom_command.text():
-            command = self.custom_command.text()
+        if custom_command:
+            command = custom_command
+            chinese_command = "自定义命令"
         else:
             # 使用英文命令
-            command = self.command_combo.currentText()
+            command = english_selected
+            chinese_command = chinese_selected
             
-        # 获取对应的中文命令
-        chinese_command = self.chinese_command_combo.currentText()
+        # 获取对应的中文描述
+        if chinese_command == "请选择中文指令":
+            chinese_command = "未选择指令"
         
         self.add_activity_entry(f"执行命令: {chinese_command}", "INFO")
         
@@ -841,6 +887,8 @@ class BilingualTerminalMonitor(QWidget):
         
         self.execute_btn.setEnabled(False)
         self.stop_btn.setEnabled(True)
+        self.clear_all_btn.setEnabled(False)  # 禁用清空全部按钮
+        self.is_executing = True  # 设置执行状态标志
         
     def start_real_time_monitoring(self, command):
         """开始实时监控"""
@@ -862,6 +910,24 @@ class BilingualTerminalMonitor(QWidget):
         else:
             # 普通命令执行模式
             self.simulate_terminal_output(command)
+            # 普通命令执行完毕后，延迟1秒自动恢复按钮状态
+            # 让用户有时间看到命令执行完毕的提示
+            QTimer.singleShot(1000, self.restore_button_state)
+            
+    def restore_button_state(self):
+        """恢复按钮状态（用于普通命令执行完毕后）"""
+        # 清空上一个命令的执行结果，避免无效信息
+        self.terminal_text.clear()
+        self.analysis_text.clear()
+        
+        # 恢复按钮状态
+        self.execute_btn.setEnabled(True)
+        self.stop_btn.setEnabled(False)
+        self.clear_all_btn.setEnabled(True)
+        self.is_executing = False
+        
+        # 添加活动记录，让用户知道可以执行下一个命令了
+        self.add_activity_entry("命令执行完毕，终端已清空，可以执行下一个命令", "INFO")
             
     def append_real_time_logs(self, command):
         """追加实时日志（模拟）"""
