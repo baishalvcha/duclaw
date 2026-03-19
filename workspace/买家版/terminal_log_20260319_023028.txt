@@ -1,0 +1,8 @@
+[02:30:25] 🔍 Starting OpenClaw log monitoring...
+[02:30:25] 📊 Log file: ~/.openclaw/logs/gateway.log
+[02:30:25] 🕐 Timestamp: 2026-03-19 02:30:25
+[02:30:25] ✅ Gateway service is running normally
+[02:30:25] 📡 QQ Bot channel connected successfully
+[02:30:25] 🤖 Model loaded: deepseek-chat
+[02:30:25] 💾 Memory usage: 65% (normal)
+[02:30:25] 🔧 System check: passed

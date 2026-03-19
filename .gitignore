@@ -1,0 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Backup files
+*.bak
+backup/
+
+# Test files
+test_*.py
+
+# Temporary files
+*.tmp
+temp/
+
+# Configuration files with sensitive data
+*.env
+*.secret
+config/private/
+
+# OpenClaw specific
+.openclaw/
+trae.config.json
+.trae/
+
+# Memory files (can be large)
+memory/
+
+# GitHub temporary
+github_temp/
+
+# Test packages
+测试版安装包_V1.0/
+
+# Web upload
+web_upload/
+
+# License system (sensitive)
+许可证码管理系统/
+
+# Fonts (can be large)
+fonts/
+
+# Batch files (not needed in repo)
+*.bat
+*.ps1
+
+# Markdown files in Chinese (keep only essential)
+# 保留重要的文档，排除临时文件

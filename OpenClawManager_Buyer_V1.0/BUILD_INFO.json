@@ -1,0 +1,56 @@
+{
+  "product": {
+    "name": "码泓mahong-openclaw管理器-买家版",
+    "description": "OpenClaw可视化管理工具-个人用户版",
+    "type": "buyer"
+  },
+  "version": {
+    "external": "1.0.0",
+    "internal": "1.0.0+build.20260318.001",
+    "semantic": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0
+    }
+  },
+  "build": {
+    "date": "2026-03-18",
+    "number": "001",
+    "type": "development",
+    "timestamp": "2026-03-18T03:40:00+08:00"
+  },
+  "git": {
+    "commit": "a1b2c3d4e5f67890abcdef1234567890",
+    "branch": "main",
+    "tag": "v1.0.0+build.20260318.001"
+  },
+  "platform": {
+    "os": "Windows",
+    "architecture": "x64",
+    "python_version": "3.9+",
+    "requirements": "requirements.txt"
+  },
+  "features": {
+    "installation": true,
+    "model_management": true,
+    "channel_management": true,
+    "license_management": true,
+    "gateway_monitoring": true,
+    "multi_language": true,
+    "auto_update": false
+  },
+  "license": {
+    "type": "proprietary",
+    "editions": ["basic", "professional"],
+    "restrictions": {
+      "basic": "5 agents per platform",
+      "professional": "unlimited"
+    }
+  },
+  "contact": {
+    "website": "https://mahong.openclaw.ai",
+    "support_qq": "123456789",
+    "email": "support@mahong.openclaw.ai",
+    "copyright": "© 2026 码泓 mahong 版权所有"
+  }
+}
