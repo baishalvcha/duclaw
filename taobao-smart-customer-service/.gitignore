@@ -1,0 +1,24 @@
+# 忽略父目录的所有内容
+../*
+
+# 忽略临时文件和缓存
+*.pyc
+__pycache__/
+.pytest_cache/
+*.log
+
+# 忽略环境文件
+.env
+venv/
+env/
+
+# 忽略IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 忽略数据文件
+*.db
+*.sqlite
+*.json
