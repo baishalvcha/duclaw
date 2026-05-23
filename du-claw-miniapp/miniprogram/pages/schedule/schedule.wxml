@@ -1,0 +1,169 @@
+<!-- 日程提醒中心 -->
+<view class="page-container">
+
+  <!-- Tab 切换 -->
+  <view class="tab-bar">
+    <view
+      class="tab-item {{activeTab === 'today' ? 'tab-active' : ''}}"
+      data-tab="today"
+      bindtap="onSwitchTab"
+    >
+      <text>今日提醒</text>
+    </view>
+    <view
+      class="tab-item {{activeTab === 'all' ? 'tab-active' : ''}}"
+      data-tab="all"
+      bindtap="onSwitchTab"
+    >
+      <text>全部提醒</text>
+    </view>
+    <view
+      class="tab-item {{activeTab === 'completed' ? 'tab-active' : ''}}"
+      data-tab="completed"
+      bindtap="onSwitchTab"
+    >
+      <text>已完成</text>
+    </view>
+  </view>
+
+  <!-- 提醒列表 -->
+  <scroll-view class="schedule-list" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- 今日提醒 -->
+    <block wx:if="{{activeTab === 'today'}}">
+      <view wx:if="{{todaySchedules.length === 0}}" class="empty-state">
+        <text class="empty-icon">📅</text>
+        <text class="empty-text">今日暂无提醒</text>
+      </view>
+      <view
+        wx:for="{{todaySchedules}}"
+        wx:key="id"
+        class="schedule-card {{item.completed ? 'schedule-done' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onToggleComplete"
+        bindlongpress="onDelete"
+      >
+        <view class="schedule-status">
+          <view class="status-dot {{item.completed ? 'dot-done' : 'dot-pending'}}"></view>
+        </view>
+        <view class="schedule-body">
+          <text class="schedule-title">{{item.title}}</text>
+          <text class="schedule-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <text class="schedule-time">🕐 {{item.remindTimeText || item.remind_time}}</text>
+        </view>
+        <view class="schedule-check">
+          <text wx:if="{{item.completed}}">✓</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 全部提醒 -->
+    <block wx:if="{{activeTab === 'all'}}">
+      <view wx:if="{{allSchedules.length === 0}}" class="empty-state">
+        <text class="empty-icon">📋</text>
+        <text class="empty-text">暂无提醒事项</text>
+      </view>
+      <view
+        wx:for="{{allSchedules}}"
+        wx:key="id"
+        class="schedule-card {{item.completed ? 'schedule-done' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onToggleComplete"
+        bindlongpress="onDelete"
+      >
+        <view class="schedule-status">
+          <view class="status-dot {{item.completed ? 'dot-done' : 'dot-pending'}}"></view>
+        </view>
+        <view class="schedule-body">
+          <text class="schedule-title">{{item.title}}</text>
+          <text class="schedule-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <text class="schedule-time">🕐 {{item.remindTimeText || item.remind_time}}</text>
+        </view>
+        <view class="schedule-check">
+          <text wx:if="{{item.completed}}">✓</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 已完成 -->
+    <block wx:if="{{activeTab === 'completed'}}">
+      <view wx:if="{{completedSchedules.length === 0}}" class="empty-state">
+        <text class="empty-icon">✅</text>
+        <text class="empty-text">暂无已完成的提醒</text>
+      </view>
+      <view
+        wx:for="{{completedSchedules}}"
+        wx:key="id"
+        class="schedule-card schedule-done"
+        data-id="{{item.id}}"
+        bindtap="onToggleComplete"
+        bindlongpress="onDelete"
+      >
+        <view class="schedule-status">
+          <view class="status-dot dot-done"></view>
+        </view>
+        <view class="schedule-body">
+          <text class="schedule-title">{{item.title}}</text>
+          <text class="schedule-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <text class="schedule-time">🕐 {{item.remindTimeText || item.remind_time}}</text>
+        </view>
+        <view class="schedule-check">
+          <text>✓</text>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 创建提醒浮动按钮 -->
+  <view class="fab" bindtap="onCreateReminder">
+    <text class="fab-icon">+</text>
+  </view>
+
+  <!-- 创建提醒弹窗（隐藏，通过 showCreateModal 控制） -->
+  <view class="modal-mask" wx:if="{{showCreateModal}}" catchtap="onCloseModal"></view>
+  <view class="modal-panel" wx:if="{{showCreateModal}}">
+    <text class="modal-title">新建提醒</text>
+
+    <view class="form-group">
+      <text class="form-label">标题</text>
+      <input
+        class="form-input"
+        value="{{newTitle}}"
+        placeholder="输入提醒标题..."
+        placeholder-style="color:#555"
+        bindinput="onTitleInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">描述（可选）</text>
+      <textarea
+        class="form-textarea"
+        value="{{newDesc}}"
+        placeholder="输入描述..."
+        placeholder-style="color:#555"
+        bindinput="onDescInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">提醒时间</text>
+      <picker
+        mode="multiSelector"
+        range="{{timeRange}}"
+        value="{{timeIndex}}"
+        bindchange="onTimeChange"
+        bindcolumnchange="onColumnChange"
+      >
+        <view class="form-picker">
+          {{newTimeText || '点击选择时间'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="modal-actions">
+      <view class="btn-outline btn-small" bindtap="onCloseModal">取消</view>
+      <view class="btn-primary btn-small" bindtap="onConfirmCreate">创建</view>
+    </view>
+  </view>
+
+</view>

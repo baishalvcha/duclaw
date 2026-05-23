@@ -1,0 +1,108 @@
+<!-- 我的页面 -->
+<view class="page-container">
+
+  <!-- 用户信息区 -->
+  <view class="user-header">
+    <view class="user-gradient-bg"></view>
+    <view class="user-content">
+      <view class="user-avatar-wrap">
+        <image
+          wx:if="{{userInfo.avatarUrl}}"
+          class="user-avatar"
+          src="{{userInfo.avatarUrl}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="user-avatar user-avatar-placeholder">
+          <text>👤</text>
+        </view>
+      </view>
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickName || 'du-claw 用户'}}</text>
+        <text class="user-id">ID: {{userInfo.userId || '---'}}</text>
+      </view>
+      <view class="user-edit" bindtap="onEditProfile">
+        <text>编辑</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 剩余次数统计 -->
+  <view class="stats-section">
+    <view class="section-title">使用统计</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-num">{{remainCounts.total || 0}}</text>
+        <text class="stat-label">总剩余次数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{remainCounts.self_media || 0}}</text>
+        <text class="stat-label">自媒体</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{remainCounts.official_doc || 0}}</text>
+        <text class="stat-label">公文写作</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{remainCounts.medical_paper || 0}}</text>
+        <text class="stat-label">医学论文</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{remainCounts.marketing_plan || 0}}</text>
+        <text class="stat-label">营销策划</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{remainCounts.teaching_design || 0}}</text>
+        <text class="stat-label">教学课件</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 套餐购买 -->
+  <view class="section-title">购买套餐</view>
+  <view class="plan-list">
+    <view
+      wx:for="{{plans}}"
+      wx:key="type"
+      class="plan-card {{item.recommended ? 'plan-recommended' : ''}}"
+      data-type="{{item.type}}"
+      bindtap="onBuyPlan"
+    >
+      <view wx:if="{{item.recommended}}" class="plan-badge">
+        <text>推荐</text>
+      </view>
+      <view class="plan-header">
+        <text class="plan-name">{{item.name}}</text>
+        <text class="plan-tag">{{item.tag}}</text>
+      </view>
+      <view class="plan-features">
+        <text
+          wx:for="{{item.features}}"
+          wx:for-item="feat"
+          wx:key="*this"
+          class="plan-feat"
+        >{{feat}}</text>
+      </view>
+      <view class="plan-footer">
+        <text class="plan-price">￥{{item.price}}</text>
+        <text class="plan-unit">/ {{item.unit}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用记录入口 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="onUsageHistory">
+      <text class="menu-text">使用记录</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="about-section">
+    <text class="about-title">关于 du-claw</text>
+    <text class="about-text">版本 1.0.0</text>
+    <text class="about-text">个人 AI 工作流助手 — 让创作更高效</text>
+    <text class="about-copyright">© 2026 du-claw Team</text>
+  </view>
+
+</view>

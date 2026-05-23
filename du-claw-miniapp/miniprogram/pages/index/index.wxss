@@ -1,0 +1,184 @@
+/* 首页样式 */
+
+/* ===== Hero 区 ===== */
+.hero-section {
+  text-align: center;
+  padding: 40rpx 0 30rpx;
+}
+
+.hero-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.logo-icon {
+  font-size: 56rpx;
+}
+
+.logo-text {
+  font-size: 48rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6c63ff, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #b0b0c8;
+  margin-bottom: 12rpx;
+}
+
+.hero-desc {
+  display: block;
+  font-size: 22rpx;
+  color: #7878a0;
+  line-height: 1.6;
+  padding: 0 40rpx;
+}
+
+/* ===== 场景卡片网格 ===== */
+.scene-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  padding: 16rpx 0;
+}
+
+.scene-card {
+  background: linear-gradient(145deg, #1a1a2e, #1f1f36);
+  border-radius: 16rpx;
+  padding: 28rpx 22rpx;
+  border: 1rpx solid rgba(108, 99, 255, 0.08);
+  box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.scene-card:active {
+  transform: translateY(-4rpx);
+  box-shadow: 0 10rpx 36rpx rgba(108, 99, 255, 0.2);
+}
+
+.scene-icon {
+  font-size: 44rpx;
+  margin-bottom: 12rpx;
+}
+
+.scene-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+}
+
+.scene-desc {
+  font-size: 22rpx;
+  color: #8888a0;
+  line-height: 1.5;
+  flex: 1;
+  margin-bottom: 14rpx;
+}
+
+.scene-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.04);
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: #6c63ff;
+  font-weight: 500;
+}
+
+.action-arrow {
+  font-size: 24rpx;
+  color: #6c63ff;
+}
+
+/* 最后一个卡片如果是奇数，占满整行 */
+.scene-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ===== 日程入口 ===== */
+.schedule-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  margin-top: 16rpx;
+  margin-bottom: 20rpx;
+  border-left: 4rpx solid #6c63ff;
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(31, 31, 54, 0.6));
+}
+
+.entry-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.entry-icon {
+  font-size: 40rpx;
+}
+
+.entry-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.entry-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.entry-desc {
+  font-size: 24rpx;
+  color: #8888a0;
+  margin-top: 4rpx;
+}
+
+.count-highlight {
+  color: #6c63ff;
+  font-weight: 600;
+  font-size: 28rpx;
+}
+
+.entry-empty {
+  color: #666680;
+}
+
+.entry-arrow {
+  font-size: 40rpx;
+  color: #555;
+}
+
+/* ===== 响应式适配 ===== */
+@media (max-width: 350px) {
+  .scene-grid {
+    grid-template-columns: 1fr;
+  }
+  .scene-card:last-child:nth-child(odd) {
+    grid-column: 1;
+  }
+}
+
+@media (min-width: 500px) {
+  .scene-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .scene-card:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

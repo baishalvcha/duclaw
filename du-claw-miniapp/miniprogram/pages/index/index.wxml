@@ -1,0 +1,48 @@
+<!-- 首页 - du-claw 个人 AI 工作流助手 -->
+<view class="page-container">
+
+  <!-- Logo 区 -->
+  <view class="hero-section">
+    <view class="hero-logo">
+      <text class="logo-icon">🐾</text>
+      <text class="logo-text">du-claw</text>
+    </view>
+    <text class="hero-subtitle">你的个人 AI 工作流助手</text>
+    <text class="hero-desc">专为自媒体创作、公文写作、医学论文、营销策划、教学课件设计打造的智能引擎</text>
+  </view>
+
+  <!-- 场景卡片网格 -->
+  <view class="scene-grid">
+    <view
+      class="scene-card"
+      wx:for="{{scenes}}"
+      wx:key="type"
+      data-type="{{item.type}}"
+      bindtap="onTapScene"
+    >
+      <text class="scene-icon">{{item.icon}}</text>
+      <text class="scene-title">{{item.title}}</text>
+      <text class="scene-desc">{{item.desc}}</text>
+      <view class="scene-action">
+        <text class="action-text">开始使用</text>
+        <text class="action-arrow">→</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 日程提醒入口 -->
+  <view class="schedule-entry card" bindtap="onTapSchedule">
+    <view class="entry-left">
+      <text class="entry-icon">📅</text>
+      <view class="entry-info">
+        <text class="entry-title">日程提醒中心</text>
+        <text class="entry-desc" wx:if="{{todayScheduleCount > 0}}">
+          今日有 <text class="count-highlight">{{todayScheduleCount}}</text> 条提醒
+        </text>
+        <text class="entry-desc entry-empty" wx:else>暂无提醒</text>
+      </view>
+    </view>
+    <text class="entry-arrow">›</text>
+  </view>
+
+</view>

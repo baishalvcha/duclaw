@@ -1,0 +1,116 @@
+<!-- 对话页 - AI 智能对话 -->
+<view class="chat-container">
+
+  <!-- 顶部导航栏 -->
+  <view class="chat-header">
+    <view class="header-back" bindtap="onBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <view class="header-info">
+      <text class="header-scene">{{sceneName}}</text>
+      <text class="header-subtitle">个人 AI 工作流助手</text>
+    </view>
+    <view class="header-action" bindtap="onNewChat">
+      <text class="new-chat-btn">+ 新建</text>
+    </view>
+  </view>
+
+  <!-- 对话列表 -->
+  <scroll-view
+    class="message-list"
+    scroll-y
+    scroll-with-animation
+    scroll-into-view="{{scrollToId}}"
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <view wx:if="{{messages.length === 0}}" class="empty-state">
+      <text class="empty-icon">💬</text>
+      <text class="empty-text">开始你的第一条消息吧</text>
+    </view>
+
+    <view
+      wx:for="{{messages}}"
+      wx:key="id"
+      id="msg-{{item.id}}"
+      class="message-item {{item.role === 'user' ? 'msg-user' : 'msg-assistant'}}"
+    >
+      <!-- 助手头像 -->
+      <view wx:if="{{item.role === 'assistant'}}" class="msg-avatar">
+        <text>🐾</text>
+      </view>
+
+      <view class="msg-bubble {{item.role === 'user' ? 'bubble-user' : 'bubble-assistant'}}">
+        <!-- 用户消息纯文本 -->
+        <block wx:if="{{item.role === 'user'}}">
+          <text class="msg-text">{{item.content}}</text>
+        </block>
+
+        <!-- 助手消息支持 Markdown 渲染 -->
+        <block wx:if="{{item.role === 'assistant'}}">
+          <rich-text
+            wx:if="{{item.richHtml}}"
+            nodes="{{item.richHtml}}"
+            class="msg-rich"
+          ></rich-text>
+          <text wx:else class="msg-text">{{item.content}}</text>
+
+          <!-- 识别到时间关键词 → 设置提醒确认条 -->
+          <view
+            wx:if="{{item.hasTimeHint && !item.remindHandled}}"
+            class="remind-bar"
+          >
+            <text class="remind-text">检测到时间信息，是否设置提醒？</text>
+            <view class="remind-actions">
+              <text class="remind-btn remind-cancel" bindtap="onDismissRemind" data-id="{{item.id}}">忽略</text>
+              <text class="remind-btn remind-confirm" bindtap="onScheduleRemind" data-text="{{item.content}}" data-id="{{item.id}}">设置提醒</text>
+            </view>
+          </view>
+        </block>
+      </view>
+
+      <!-- 用户头像 -->
+      <view wx:if="{{item.role === 'user'}}" class="msg-avatar msg-avatar-user">
+        <text>👤</text>
+      </view>
+    </view>
+
+    <!-- 加载动画 -->
+    <view wx:if="{{loading}}" class="loading-dots">
+      <view class="dot"></view>
+      <view class="dot"></view>
+      <view class="dot"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入区 -->
+  <view class="input-area">
+    <view class="remain-hint">
+      <text wx:if="{{remainCount >= 0}}">剩余 <text class="remain-num">{{remainCount}}</text> 次</text>
+    </view>
+    <view class="input-row">
+      <textarea
+        class="msg-input"
+        value="{{inputValue}}"
+        placeholder="输入你的问题..."
+        placeholder-style="color:#555"
+        auto-height
+        maxlength="2000"
+        cursor-spacing="20"
+        show-confirm-bar="{{false}}"
+        bindinput="onInput"
+        bindconfirm="onSend"
+        confirm-type="send"
+        adjust-position="{{false}}"
+        disable-default-padding
+      ></textarea>
+      <view
+        class="send-btn {{inputValue ? 'send-active' : ''}} {{loading ? 'send-disabled' : ''}}"
+        bindtap="onSend"
+      >
+        <text>➤</text>
+      </view>
+    </view>
+  </view>
+
+</view>

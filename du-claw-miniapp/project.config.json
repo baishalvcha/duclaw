@@ -1,0 +1,13 @@
+{
+  "appid": "wx_your_appid_here",
+  "projectname": "du-claw",
+  "description": "du-claw 个人 AI 助手",
+  "miniprogramRoot": "miniprogram/",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  }
+}
